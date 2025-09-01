@@ -1,0 +1,21 @@
+
+{
+  "env": {
+    "REDIS_DISABLED": "1",
+    "NEXT_DISABLE_REDIS": "1"
+  },
+  "build": {
+    "env": {
+      "REDIS_DISABLED": "1",
+      "NEXT_DISABLE_REDIS": "1"
+    }
+  },
+  "functions": {
+    "pages/api/socket/stats.ts": {
+      "maxDuration": 10
+    },
+    "app/api/socket/stats/route.ts": {
+      "maxDuration": 10
+    }
+  }
+}
