@@ -152,7 +152,7 @@ export async function GET(request: NextRequest) {
 
     // Filtrar por posición en mock data si es necesario
     if (position) {
-      banners = banners.filter(banner => banner.position === position);
+      banners = banners.filter((banner: any) => banner.position === position);
     }
 
     // Aplicar límite
@@ -189,7 +189,7 @@ export async function POST(request: NextRequest) {
 
     try {
       const supabase = supabaseServer();
-      const { data: { user: authUser }, error: authError } = await supabase.auth.getUser();
+      const { data: { user: authUser }, error: authError } = await supabase!.auth.getUser();
       if (!authError && authUser) {
         user = authUser;
         isAdmin = user.email === process.env.HALL_ADMIN_EMAIL || user.email === 'admin@hablandodecaballos.com';

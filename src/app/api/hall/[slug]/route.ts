@@ -8,7 +8,7 @@ export async function GET(
 ) {
   const supa = createSupabaseServerClientReadOnly();
 
-  const { data: item, error: e1 } = await supa
+  const { data: item, error: e1 } = await supa!
     .from("hall_items")
     .select("*")
     .eq("slug", params.slug)
@@ -19,8 +19,8 @@ export async function GET(
   }
 
   const [{ data: media }, { data: comments }] = await Promise.all([
-    supa.from("hall_media").select("*").eq("hall_id", item.id).order("created_at", { ascending: false }),
-    supa.from("hall_comments").select("*").eq("hall_id", item.id).order("created_at", { ascending: false }),
+    supa!.from("hall_media").select("*").eq("hall_id", item.id).order("created_at", { ascending: false }),
+    supa!.from("hall_comments").select("*").eq("hall_id", item.id).order("created_at", { ascending: false }),
   ]);
 
   return NextResponse.json({ item, media: media ?? [], comments: comments ?? [] });

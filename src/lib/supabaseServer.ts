@@ -1,4 +1,5 @@
 // lib/supabaseServer.ts
+import { cookies } from 'next/headers';
 import { createClient } from '@supabase/supabase-js';
 import { isSupabaseAvailable } from './safeSupabaseServer';
 

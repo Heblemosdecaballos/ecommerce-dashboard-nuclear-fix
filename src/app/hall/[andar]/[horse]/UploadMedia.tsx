@@ -67,7 +67,7 @@ export default function UploadMediaBlock(props: {
         <h4 className="font-medium mb-2">Galería</h4>
         {mediaList?.length ? (
           <ul className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {mediaList.map((m) => (
+            {mediaList.map((m: any) => (
               <li key={m.id} className="border rounded p-2">
                 <div className="aspect-square overflow-hidden rounded mb-2">
                   {/* eslint-disable-next-line @next/next/no-img-element */}

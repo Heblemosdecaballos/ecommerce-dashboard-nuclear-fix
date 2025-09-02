@@ -1,12 +1,12 @@
 // app/api/stories/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { createSafeSupabaseServerClient } from "@/lib/safeSupabaseServer";
+import { createServerClient } from "@/lib/safeSupabaseServer";
 
-// Función supa() removida - usando createSafeSupabaseServerClient() directamente
+// Función supa() removida - usando createServerClient() directamente
 
 // GET ?page=1&limit=12  -> lista de historias publicadas
 export async function GET(req: NextRequest) {
-  const supabase = createSafeSupabaseServerClient();
+  const supabase = createServerClient();
 
   // Si Supabase no está disponible, retornar null o fallback
   if (!supabase) {
@@ -31,13 +31,13 @@ export async function GET(req: NextRequest) {
 
 // POST {title,body,media:[{url,kind,width,height,duration_seconds}]}
 export async function POST(req: NextRequest) {
-  const supabase = createSafeSupabaseServerClient();
+  const supabase = createServerClient();
 
   // Si Supabase no está disponible, retornar null o fallback
   if (!supabase) {
     return NextResponse.json({ error: "Servicio no disponible" }, { status: 503 });
   }
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase!.auth.getUser();
   if (!user) return NextResponse.json({ error: "auth" }, { status: 401 });
 
   const { title, body, media } = await req.json();
@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
       height: m.height ?? null,
       duration_seconds: m.duration_seconds ?? null
     }));
-    const { error: mErr } = await supabase.from("story_media").insert(rows);
+    const { error: mErr } = await supabase!.from("story_media").insert(rows);
     if (mErr) return NextResponse.json({ error: mErr.message }, { status: 500 });
   }
 

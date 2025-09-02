@@ -14,9 +14,9 @@ export default function SessionButton({ className = '' }: Props) {
 
   useEffect(() => {
     // Estado inicial
-    supabase.auth.getUser().then(({ data }) => setUser(data.user ?? null));
+    supabase!.auth.getUser().then(({ data }) => setUser(data.user ?? null));
     // Suscripción a cambios
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+    const { data: sub } = supabase!.auth.onAuthStateChange((_e, session) => {
       setUser(session?.user ?? null);
     });
     return () => sub?.subscription.unsubscribe();
@@ -26,7 +26,7 @@ export default function SessionButton({ className = '' }: Props) {
     e.preventDefault();
     if (!email) return;
 
-    const { error } = await supabase.auth.signInWithOtp({
+    const { error } = await supabase!.auth.signInWithOtp({
       email,
       options: { emailRedirectTo: `${location.origin}/` },
     });
@@ -44,7 +44,7 @@ export default function SessionButton({ className = '' }: Props) {
         <span className="mr-3 text-sm">{user.email}</span>
         <button
           className="rounded bg-neutral-900 px-3 py-1 text-white"
-          onClick={() => supabase.auth.signOut()}
+          onClick={() => supabase!.auth.signOut()}
         >
           Salir
         </button>

@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
     .select('id,title,category,created_at')
     .or('open_today.eq.true,created_at.gte.' + new Date(Date.now()-24*60*60*1000).toISOString())
 
-  const { data: subs } = await supa.from('subscriptions').select('email')
+  const { data: subs } = await supa!.from('subscriptions').select('email')
 
   if (!subs?.length) return NextResponse.json({ ok: true, sent: 0 })
 
@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
       <p>Ingresa al foro: <a href="${'${req.nextUrl.origin}'}">${'${req.nextUrl.origin}'}</a></p>
     </div>`
 
-  await Promise.allSettled(subs.map(s => resend.emails.send({
+  await Promise.allSettled(subs.map((s: any) => resend.emails.send({
     from: 'Foro Criollo <noreply@forocriollo.com>',
     to: s.email,
     subject: 'Foros abiertos de hoy',

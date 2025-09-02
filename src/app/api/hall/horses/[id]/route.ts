@@ -67,7 +67,7 @@ export async function PUT(
 ) {
   try {
     const supabase = supabaseServer();
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const { data: { user }, error: authError } = await supabase!.auth.getUser();
 
     if (authError || !user) {
       return NextResponse.json({ error: "No autenticado" }, { status: 401 });

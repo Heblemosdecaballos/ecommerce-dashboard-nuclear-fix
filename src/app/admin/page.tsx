@@ -6,7 +6,7 @@ export default async function AdminHome() {
   const supabase = createSupabaseServerClient()
   if (!supabase) redirect('/auth')
   
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { user } } = await supabase!.auth.getUser()
   if (!user) redirect('/auth')
 
   const { data: me } = await supabase

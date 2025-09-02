@@ -7,10 +7,10 @@ export async function POST(req: Request) {
 
   const supabase = getSupabaseServer();
 
-  const { data: { user }, error: uerr } = await supabase.auth.getUser();
+  const { data: { user }, error: uerr } = await supabase!.auth.getUser();
   if (uerr || !user) return NextResponse.json({ error: 'No autenticado' }, { status: 401 });
 
-  const { error } = await supabase.rpc('report_post', { p_post_id: postId, p_reason: reason ?? null });
+  const { error } = await supabase!.rpc('report_post', { p_post_id: postId, p_reason: reason ?? null });
   if (error) return NextResponse.json({ error: error.message }, { status: 400 });
 
   return NextResponse.json({ ok: true });

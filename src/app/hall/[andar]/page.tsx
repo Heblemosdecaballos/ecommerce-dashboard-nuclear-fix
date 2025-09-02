@@ -41,7 +41,7 @@ export default async function HallByAndar({ params }: { params: { andar: string 
   if (!isValidAndar(andar)) notFound();
 
   const supabase = supabaseServer();
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase!.auth.getUser();
   const admin = isAdminEmail(user?.email);
 
   const { data: horses } = await supabase
@@ -51,10 +51,10 @@ export default async function HallByAndar({ params }: { params: { andar: string 
     .order("name", { ascending: true });
 
   const covers = await Promise.all(
-    (horses || []).map(async (h) => ({ id: h.id, url: await getCoverUrl(h.id) }))
+    (horses || []).map(async (h: any) => ({ id: h.id, url: await getCoverUrl(h.id) }))
   );
-  const getUrl = (id: string) => covers.find(c => c.id === id)?.url || null;
-  const andarName = ANDARES.find(a => a.slug === andar)?.name;
+  const getUrl = (id: string) => covers.find((c: any) => c.id === id)?.url || null;
+  const andarName = ANDARES.find((a: any) => a.slug === andar)?.name;
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
@@ -89,7 +89,7 @@ export default async function HallByAndar({ params }: { params: { andar: string 
         <p className="text-neutral-700">Aún no hay ejemplares en este andar.</p>
       ) : (
         <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {horses!.map(h => {
+          {horses!.map((h: any) => {
             const cover = getUrl(h.id);
             return (
               <li key={h.id} className="rounded-2xl border bg-white/80 p-4 hover:shadow-sm">

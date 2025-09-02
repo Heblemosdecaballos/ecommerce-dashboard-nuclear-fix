@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 export async function POST(request: NextRequest) {
   try {
     const supabase = supabaseServer();
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const { data: { user }, error: authError } = await supabase!.auth.getUser();
 
     if (authError || !user) {
       return NextResponse.json({ error: "Debes iniciar sesión para votar" }, { status: 401 });
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
       .from("hall_votes")
       .select("*")
       .eq("horse_id", horse_id)
-      .eq("user_id", user.id)
+      .eq("user_id", user?.id)
       .single();
 
     if (existingVote) {
@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
         .from("hall_votes")
         .update({ value })
         .eq("horse_id", horse_id)
-        .eq("user_id", user.id);
+        .eq("user_id", user?.id);
 
       if (updateError) {
         return NextResponse.json({ error: "Error actualizando voto" }, { status: 500 });
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
         .from("hall_votes")
         .insert({
           horse_id,
-          user_id: user.id,
+          user_id: user?.id,
           value
         });
 
@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
       .select("value")
       .eq("horse_id", horse_id);
 
-    const totalVotes = votes?.reduce((sum, vote) => sum + vote.value, 0) || 0;
+    const totalVotes = votes?.reduce((sum: number, vote: any) => sum + vote.value, 0) || 0;
 
     await supabase
       .from("hall_horses")
@@ -101,20 +101,20 @@ export async function GET(request: NextRequest) {
       .select("value")
       .eq("horse_id", horse_id);
 
-    const totalVotes = votes?.reduce((sum, vote) => sum + vote.value, 0) || 0;
-    const upVotes = votes?.filter(v => v.value === 1)?.length || 0;
-    const downVotes = votes?.filter(v => v.value === -1)?.length || 0;
+    const totalVotes = votes?.reduce((sum: number, vote: any) => sum + vote.value, 0) || 0;
+    const upVotes = votes?.filter((v: any) => v.value === 1)?.length || 0;
+    const downVotes = votes?.filter((v: any) => v.value === -1)?.length || 0;
 
     // Si hay usuario, obtener su voto
     let userVote = null;
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data: { user } } = await supabase!.auth.getUser();
     
     if (user) {
       const { data: userVoteData } = await supabase
         .from("hall_votes")
         .select("value")
         .eq("horse_id", horse_id)
-        .eq("user_id", user.id)
+        .eq("user_id", user?.id)
         .single();
       
       userVote = userVoteData?.value || null;

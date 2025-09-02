@@ -7,7 +7,7 @@ export default function SupabaseListener() {
   const router = useRouter();
   useEffect(() => {
     const supabase = createSupabaseBrowser();
-    const { data: sub } = supabase.auth.onAuthStateChange(() => router.refresh());
+    const { data: sub } = supabase!.auth.onAuthStateChange(() => router.refresh());
     return () => sub.subscription.unsubscribe();
   }, [router]);
   return null;

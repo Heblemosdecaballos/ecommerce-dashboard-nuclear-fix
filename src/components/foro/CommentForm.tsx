@@ -17,7 +17,7 @@ export default function CommentForm({ threadId }: { threadId: string }) {
 
     setLoading(true);
     const supabase = supabaseBrowser();
-    const { error } = await supabase.from("comments").insert({ thread_id: threadId, body });
+    const { error } = await supabase!.from("comments").insert({ thread_id: threadId, body });
     setLoading(false);
     if (error) return alert(error.message);
     (e.currentTarget as HTMLFormElement).reset();

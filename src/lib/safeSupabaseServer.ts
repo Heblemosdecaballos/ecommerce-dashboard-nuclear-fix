@@ -1,6 +1,7 @@
 // src/lib/safeSupabaseServer.ts
 // Wrapper seguro para Supabase (SOLO SERVIDOR) que maneja la ausencia de credenciales válidas
 
+import { cookies } from 'next/headers';
 import { createServerClient } from "@supabase/ssr";
 import type { CookieOptions } from "@supabase/ssr";
 
@@ -13,9 +14,9 @@ function hasValidSupabaseConfig(): boolean {
   return !!(
     url && 
     key && 
-    url !== "https://demo-project.supabase.co" &&
+    url !== "https://demo-project.supabase!.co" &&
     key !== "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRlbW8tcHJvamVjdCIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNjQ1MDk1MzM1LCJleHAiOjE5NjA2NzEzMzV9.demo-key-for-development-only" &&
-    url.includes('supabase.co') &&
+    url.includes('supabase!.co') &&
     key.length > 50
   );
 }
@@ -24,7 +25,7 @@ function hasValidSupabaseConfig(): boolean {
 export const isSupabaseAvailable = hasValidSupabaseConfig();
 
 // Cliente seguro para server
-export function createSafeSupabaseServerClient() {
+export function createServerClient() {
   if (!hasValidSupabaseConfig()) {
     console.warn('Supabase no está configurado correctamente. Usando cliente mock.');
     return null;
@@ -57,7 +58,7 @@ export function createSafeSupabaseServerClient() {
 }
 
 // Cliente seguro para server (solo lectura)
-export function createSafeSupabaseServerClientReadOnly() {
+export function createServerClientReadOnly() {
   if (!hasValidSupabaseConfig()) {
     console.warn('Supabase no está configurado correctamente. Usando cliente mock.');
     return null;
@@ -92,8 +93,8 @@ export async function safeSupabaseServerOperation<T>(
   readonly: boolean = false
 ): Promise<T> {
   const client = readonly 
-    ? createSafeSupabaseServerClientReadOnly()
-    : createSafeSupabaseServerClient();
+    ? createServerClientReadOnly()
+    : createServerClient();
 
   if (!client) {
     console.log('Supabase no disponible, usando fallback');
@@ -109,9 +110,9 @@ export async function safeSupabaseServerOperation<T>(
 }
 
 // Aliases para compatibilidad con código existente
-export const supabaseServer = createSafeSupabaseServerClient;
-export const createSupabaseServerClient = createSafeSupabaseServerClient;
-export const createSupabaseServerClientReadOnly = createSafeSupabaseServerClientReadOnly;
-export const createClient = createSafeSupabaseServerClient;
+export const supabaseServer = createServerClient;
+export const createSupabaseServerClient = createServerClient;
+export const createSupabaseServerClientReadOnly = createServerClientReadOnly;
+export const createClient = createServerClient;
 
-export default createSafeSupabaseServerClient;
+export default createServerClient;

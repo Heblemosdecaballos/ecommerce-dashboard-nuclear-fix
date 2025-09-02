@@ -4,7 +4,7 @@ import { cn } from "@/src/lib/utils";
 function getInitials(input?: string) {
   if (!input) return "U";
   const parts = input.trim().split(/\s+/).slice(0, 2);
-  return parts.map((p) => p[0]?.toUpperCase()).join("") || "U";
+  return parts.map((p: any) => p[0]?.toUpperCase()).join("") || "U";
 }
 
 export function AvatarText({

@@ -38,7 +38,7 @@ export default function ReportsPage() {
 
   async function checkMod() {
     try {
-      const { data, error } = await supabase.rpc('is_moderator');
+      const { data, error } = await supabase!.rpc('is_moderator');
       if (error) throw error;
       setIsMod(!!data);
     } catch {
@@ -234,7 +234,7 @@ export default function ReportsPage() {
 
       {/* Lista */}
       <ul className="space-y-3">
-        {items.map(p => (
+        {items.map((p: any) => (
           <li key={p.id} className="border rounded-lg p-3">
             <div className="text-sm text-neutral-600 flex items-center justify-between gap-2">
               <span>

@@ -14,7 +14,7 @@ export default function LoginButton() {
     const origin = window.location.origin;
     const next = window.location.pathname || '/';
 
-    await supabase.auth.signInWithOAuth({
+    await supabase!.auth.signInWithOAuth({
       provider: 'google',
       options: {
         redirectTo: `${origin}/auth/callback?next=${encodeURIComponent(next)}`

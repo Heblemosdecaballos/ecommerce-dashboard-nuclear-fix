@@ -26,7 +26,7 @@ export default async function Page({
     .order("name", { ascending: true });
 
   const andares =
-    ((andaresRows as AndarRow[] | null) || []).map((r) => ({
+    ((andaresRows as AndarRow[] | null) || []).map((r: any) => ({
       slug: r.slug,
       label: r.name ?? labelFromSlug(r.slug),
     })) ?? [];

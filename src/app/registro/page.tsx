@@ -14,7 +14,7 @@ async function register(formData: FormData) {
   const password = String(formData.get("password") || "");
 
   const supabase = createSupabaseServer();
-  const { error } = await supabase.auth.signUp({
+  const { error } = await supabase!.auth.signUp({
     email,
     password,
     options: { data: { full_name } },
@@ -28,7 +28,7 @@ export default async function RegisterPage() {
   const supabase = createSupabaseServer();
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await supabase!.auth.getUser();
   if (user) redirect("/");
 
   return (

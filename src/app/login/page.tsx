@@ -13,7 +13,7 @@ async function loginAction(formData: FormData) {
   const password = String(formData.get("password") || "");
 
   const supabase = createSupabaseServer();
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const { error } = await supabase!.auth.signInWithPassword({ email, password });
   if (error) {
     redirect(`/login?error=${encodeURIComponent(error.message)}`);
   }
@@ -24,7 +24,7 @@ export default async function LoginPage() {
   const supabase = createSupabaseServer();
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await supabase!.auth.getUser();
   if (user) redirect("/");
 
   return (

@@ -7,10 +7,10 @@ export async function POST(req: Request) {
 
   const supabase = getSupabaseServer();
 
-  const { data: { user }, error: uerr } = await supabase.auth.getUser();
+  const { data: { user }, error: uerr } = await supabase!.auth.getUser();
   if (uerr || !user) return NextResponse.json({ error: 'No autenticado' }, { status: 401 });
 
-  const { error } = await supabase.rpc('mod_hide_post', { p_post_id: postId, p_hidden: hidden ?? true });
+  const { error } = await supabase!.rpc('mod_hide_post', { p_post_id: postId, p_hidden: hidden ?? true });
   if (error) return NextResponse.json({ error: error.message }, { status: 403 });
 
   return NextResponse.json({ ok: true });

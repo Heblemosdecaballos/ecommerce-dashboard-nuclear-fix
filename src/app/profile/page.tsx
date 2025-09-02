@@ -25,7 +25,7 @@ export default function ProfilePage() {
 
     (async () => {
       try {
-        const { data: { user }, error: userErr } = await supabase.auth.getUser();
+        const { data: { user }, error: userErr } = await supabase!.auth.getUser();
         if (userErr) throw userErr;
         if (!user) {
           setMsg('Debes iniciar sesión para editar tu perfil.');
@@ -36,7 +36,7 @@ export default function ProfilePage() {
         const { data, error } = await supabase
           .from('profiles')
           .select('id, username, full_name, phone')
-          .eq('id', user.id)
+          .eq('id', user?.id)
           .maybeSingle<Profile>();
         if (error) throw error;
 
@@ -62,19 +62,19 @@ export default function ProfilePage() {
       setMsg(null);
       setSaving(true);
 
-      const { data: { user }, error: userErr } = await supabase.auth.getUser();
+      const { data: { user }, error: userErr } = await supabase!.auth.getUser();
       if (userErr) throw userErr;
       if (!user) throw new Error('Debes iniciar sesión');
 
       const payload = {
-        id: user.id,
+        id: user?.id,
         username: username.trim(),
         full_name: fullName.trim(),
         phone: phone.trim(),
         updated_at: new Date().toISOString(),
       };
 
-      const { error } = await supabase.from('profiles').upsert(payload, {
+      const { error } = await supabase!.from('profiles').upsert(payload, {
         onConflict: 'id',
       });
       if (error) throw error;

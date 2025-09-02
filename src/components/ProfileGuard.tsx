@@ -11,13 +11,13 @@ export default function ProfileGuard() {
     let active = true;
 
     (async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase!.auth.getUser();
       if (!user) return;
 
       const { data, error } = await supabase
         .from('profiles')
         .select('id, username, phone')
-        .eq('id', user.id)                 // <<--- usar id, NO user_id
+        .eq('id', user?.id)                 // <<--- usar id, NO user_id
         .maybeSingle();
 
       if (active) {

@@ -11,7 +11,7 @@ export async function GET(request: Request) {
 
     const supa = createSupabaseServerClient();
 
-    let q = supa
+    let q = supa!
       .from("threads")
       .select(
         "id,title,category,tags,author_id,created_at,replies_count,views,hot,open_today,last_activity,status,created_by,pinned_post_id"

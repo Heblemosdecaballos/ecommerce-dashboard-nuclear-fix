@@ -13,7 +13,7 @@ export default function RequireAuth({ children }: { children: React.ReactNode })
   useEffect(() => {
     const run = async () => {
       const supabase = createSupabaseBrowserClient()
-      const { data: { session } } = await supabase.auth.getSession()
+      const { data: { session } } = await supabase!.auth.getSession()
       if (!session) {
         router.replace(`/login?next=${encodeURIComponent(pathname)}`)
         return

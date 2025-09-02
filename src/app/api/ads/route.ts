@@ -1,16 +1,16 @@
 // app/api/ads/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { createSafeSupabaseServerClient } from "@/lib/safeSupabaseServer";
+import { createServerClient } from "@/lib/safeSupabaseServer";
 
-// Función supa() removida - usando createSafeSupabaseServerClient() directamente
+// Función supa() removida - usando createServerClient() directamente
 
 // POST -> crear anuncio
 // Body: { slot, image_url?, link_url?, html?, active? }
 export async function POST(req: NextRequest) {
-  const db = createSafeSupabaseServerClient();
+  const db = createServerClient();
   if (!db) return NextResponse.json({ error: "Database connection failed" }, { status: 500 });
   
-  const { data: { user } } = await db.auth.getUser();
+  const { data: { user } } = await db!.auth.getUser();
   if (!user) return NextResponse.json({ error: "auth" }, { status: 401 });
 
   const payload = await req.json();
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { error } = await db.from("ads").insert({
+  const { error } = await db!.from("ads").insert({
     slot, image_url, link_url, html, active, author_id: user.id,
   });
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
@@ -38,15 +38,15 @@ export async function POST(req: NextRequest) {
 
 // GET -> lista anuncios (público: solo activos). ?all=1 requiere login
 export async function GET(req: NextRequest) {
-  const db = createSafeSupabaseServerClient();
+  const db = createServerClient();
   if (!db) return NextResponse.json({ error: "Database connection failed" }, { status: 500 });
   
   const all = new URL(req.url).searchParams.get("all") === "1";
 
   if (all) {
-    const { data: { user } } = await db.auth.getUser();
+    const { data: { user } } = await db!.auth.getUser();
     if (!user) return NextResponse.json({ error: "auth" }, { status: 401 });
-    const { data, error } = await db.from("ads").select("*").order("created_at", { ascending: false });
+    const { data, error } = await db!.from("ads").select("*").order("created_at", { ascending: false });
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
     return NextResponse.json({ items: data ?? [] });
   }

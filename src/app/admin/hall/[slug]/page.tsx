@@ -11,7 +11,7 @@ export default async function AdminHallPage({ params }: { params: { slug: string
   const { item, media } = res.ok ? await res.json() : { item: null, media: [] as any[] };
 
   const supa = createSupabaseServerClientReadOnly();
-  const { data: { user } } = supa ? await supa.auth.getUser() : { data: { user: null } };
+  const { data: { user } } = supa ? await supa!.auth.getUser() : { data: { user: null } };
 
   return (
     <main className="space-y-6">

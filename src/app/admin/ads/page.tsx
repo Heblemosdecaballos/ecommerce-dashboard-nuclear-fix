@@ -42,7 +42,7 @@ export default function AdsAdmin() {
 
   useEffect(() => {
     if (sb) {
-      sb && sb.auth.getUser().then(({ data }) => setUser(data.user ?? null));
+      sb && sb!.auth.getUser().then(({ data }) => setUser(data.user ?? null));
       load();
     }
   }, []);

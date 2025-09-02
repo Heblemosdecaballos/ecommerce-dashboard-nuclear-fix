@@ -5,7 +5,7 @@ import { createSupabaseServerClientReadOnly } from "@/utils/supabase/server";
 
 export default async function Header() {
   const supa = createSupabaseServerClientReadOnly();
-  const { data: { user } } = await supa.auth.getUser();
+  const { data: { user } } = await supa!.auth.getUser();
 
   return (
     <header className="site-header">

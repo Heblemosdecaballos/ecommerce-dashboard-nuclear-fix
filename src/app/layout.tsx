@@ -55,7 +55,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   let user = null;
   try {
     const supabase = supabaseServer();
-    const { data } = await supabase.auth.getUser();
+    const { data } = await supabase!.auth.getUser();
     user = data?.user || null;
   } catch (error) {
     // Continuar sin usuario si hay error

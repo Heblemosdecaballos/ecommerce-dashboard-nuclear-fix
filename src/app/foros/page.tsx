@@ -105,7 +105,7 @@ export default async function ForosPage() {
   }
 
   // Obtener perfiles de autores de forma segura
-  const authorIds = Array.from(new Set(threads.map(t => t.author_id).filter(Boolean))) as string[];
+  const authorIds = Array.from(new Set(threads.map((t: any) => t.author_id).filter(Boolean))) as string[];
   const profilesMap = new Map<string, any>();
   
   if (authorIds.length > 0) {

@@ -4,7 +4,7 @@ import { createSupabaseBrowserClient } from "@/utils/supabase/client";
 export default function LoginWithGoogle() {
   const onClick = async () => {
     const supa = createSupabaseBrowserClient();
-    await supa.auth.signInWithOAuth({
+    await supa!.auth.signInWithOAuth({
       provider: "google",
       options: { redirectTo: `${window.location.origin}/auth/callback?next=/` },
     });

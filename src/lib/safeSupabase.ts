@@ -12,9 +12,9 @@ function hasValidSupabaseConfig(): boolean {
   return !!(
     url && 
     key && 
-    url !== "https://demo-project.supabase.co" &&
+    url !== "https://demo-project.supabase!.co" &&
     key !== "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRlbW8tcHJvamVjdCIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNjQ1MDk1MzM1LCJleHAiOjE5NjA2NzEzMzV9.demo-key-for-development-only" &&
-    url.includes('supabase.co') &&
+    url.includes('supabase!.co') &&
     key.length > 50
   );
 }

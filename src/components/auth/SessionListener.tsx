@@ -12,7 +12,7 @@ export default function SessionListener() {
     const supabase = supabaseBrowser()
 
     // Cuando cambie la sesión (login/logout/refresh), refrescamos la UI
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
+    const { data: { subscription } } = supabase!.auth.onAuthStateChange(() => {
       router.refresh()
     })
 

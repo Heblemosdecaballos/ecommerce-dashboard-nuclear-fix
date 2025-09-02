@@ -90,7 +90,7 @@ export default async function ThreadDetailBySlug({ params }: { params: { slug: s
   }
 
   // Incrementar visitas
-  await supabase.rpc("increment_thread_views", { p_thread_id: thread.id });
+  await supabase!.rpc("increment_thread_views", { p_thread_id: thread.id });
 
   // Autor
   const { data: profile } = await supabase
@@ -100,13 +100,13 @@ export default async function ThreadDetailBySlug({ params }: { params: { slug: s
     .single();
 
   // Usuario actual (permisos UI)
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase!.auth.getUser();
   let meIsMod = false;
   if (user) {
     const { data: me } = await supabase
       .from("profiles")
       .select("is_moderator")
-      .eq("id", user.id)
+      .eq("id", user?.id)
       .single();
     meIsMod = !!me?.is_moderator;
   }
@@ -156,7 +156,7 @@ export default async function ThreadDetailBySlug({ params }: { params: { slug: s
         <h2 className="text-xl font-medium mb-3">Respuestas</h2>
         {posts && posts.length ? (
           <ul className="space-y-3">
-            {posts.filter(p => !p.is_deleted).map((p) => (
+            {posts.filter((p: any) => !p.is_deleted).map((p: any) => (
               <PostItem
                 key={p.id}
                 post={{ id: p.id, content: p.content, created_at: p.created_at }}

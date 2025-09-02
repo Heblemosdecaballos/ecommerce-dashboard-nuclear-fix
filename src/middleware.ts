@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { createSafeSupabaseServerClient } from "@/lib/safeSupabaseServer";
+import { createServerClient } from "@/lib/safeSupabaseServer";
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
-  const supabase = createSafeSupabaseServerClient(
+  const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
@@ -23,7 +23,7 @@ export async function middleware(req: NextRequest) {
   );
 
   // Refresca sesión en cada request
-  await supabase.auth.getUser().catch(() => {});
+  await supabase!.auth.getUser().catch(() => {});
   return res;
 }
 

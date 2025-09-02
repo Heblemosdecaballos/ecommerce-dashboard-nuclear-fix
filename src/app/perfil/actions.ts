@@ -8,7 +8,7 @@ type Resp = { ok: true } | { ok: false; error: string }
 
 export async function updateProfileAction(formData: FormData): Promise<Resp> {
   const supabase = createSupabaseServerClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { user } } = await supabase!.auth.getUser()
   if (!user) return { ok: false, error: 'no-auth' }
 
   const full_name = String(formData.get('full_name') || '').trim()
@@ -20,7 +20,7 @@ export async function updateProfileAction(formData: FormData): Promise<Resp> {
   const { error } = await supabase
     .from('profiles')
     .update({ full_name, username, phone })
-    .eq('id', user.id)
+    .eq('id', user?.id)
 
   if (error) return { ok: false, error: error.message }
 

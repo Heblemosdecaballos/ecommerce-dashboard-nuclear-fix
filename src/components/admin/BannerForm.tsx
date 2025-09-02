@@ -300,7 +300,7 @@ export default function BannerForm({ initialData }: { initialData?: Partial<Bann
 
           <div className="mt-4 p-4 bg-gray-50 rounded-lg">
             <div className="text-sm text-gray-700">
-              <strong>Posición:</strong> {POSITION_OPTIONS.find(p => p.value === formData.position)?.label}
+              <strong>Posición:</strong> {POSITION_OPTIONS.find((p: any) => p.value === formData.position)?.label}
             </div>
             <div className="text-sm text-gray-700 mt-1">
               <strong>Anunciante:</strong> {formData.advertiser_name || 'No especificado'}
@@ -370,7 +370,7 @@ export default function BannerForm({ initialData }: { initialData?: Partial<Bann
               onChange={(e) => handleChange('position', e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              {POSITION_OPTIONS.map(option => (
+              {POSITION_OPTIONS.map((option: any) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
                 </option>

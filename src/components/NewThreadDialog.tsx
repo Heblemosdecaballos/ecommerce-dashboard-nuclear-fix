@@ -46,7 +46,7 @@ export default function NewThreadDialog({ open, onClose }: Props) {
       const {
         data: { user },
         error: userErr,
-      } = await supabase.auth.getUser();
+      } = await supabase!.auth.getUser();
       if (userErr) throw userErr;
       if (!user) throw new Error('Debes iniciar sesión');
 
@@ -56,7 +56,7 @@ export default function NewThreadDialog({ open, onClose }: Props) {
         .insert({
           title: title.trim(),
           category,
-          created_by: user.id,
+          created_by: user?.id,
         })
         .select('id')
         .single();

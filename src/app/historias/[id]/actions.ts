@@ -8,7 +8,7 @@ type Resp = { ok: true } | { ok: false; error: string }
 
 export async function addStoryComment(formData: FormData): Promise<Resp> {
   const supabase = createSupabaseServerClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { user } } = await supabase!.auth.getUser()
   if (!user) return { ok: false, error: 'no-auth' }
 
   const storyId = String(formData.get('story_id') || '')
@@ -18,12 +18,12 @@ export async function addStoryComment(formData: FormData): Promise<Resp> {
 
   const payload: Record<string, any> = {
     story_id: storyId,
-    author_id: user.id,
+    author_id: user?.id,
     content,
     created_at: new Date().toISOString(),
   }
 
-  const { error } = await supabase.from('story_comments').insert(payload)
+  const { error } = await supabase!.from('story_comments').insert(payload)
   if (error) return { ok: false, error: error.message }
 
   revalidatePath(`/historias/${storyId}`)

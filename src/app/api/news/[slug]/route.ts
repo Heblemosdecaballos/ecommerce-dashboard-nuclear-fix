@@ -1,12 +1,12 @@
 // app/api/news/[slug]/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { createSafeSupabaseServerClient } from "@/lib/safeSupabaseServer";
+import { createServerClient } from "@/lib/safeSupabaseServer";
 
-// Función supa() removida - usando createSafeSupabaseServerClient() directamente
+// Función supa() removida - usando createServerClient() directamente
 
 // GET público (si published=true)
 export async function GET(_: NextRequest, { params }: { params: { slug: string } }) {
-  const db = createSafeSupabaseServerClient();
+  const db = createServerClient();
   if (!db) return NextResponse.json({ error: "Database connection failed" }, { status: 500 });
   
   const { data, error } = await db
@@ -20,14 +20,14 @@ export async function GET(_: NextRequest, { params }: { params: { slug: string }
 }
 
 export async function PUT(req: NextRequest, { params }: { params: { slug: string } }) {
-  const db = createSafeSupabaseServerClient();
+  const db = createServerClient();
   if (!db) return NextResponse.json({ error: "Database connection failed" }, { status: 500 });
   
-  const { data: { user } } = await db.auth.getUser();
+  const { data: { user } } = await db!.auth.getUser();
   if (!user) return NextResponse.json({ error: "auth" }, { status: 401 });
 
   const { title, excerpt, body, cover_url, published } = await req.json();
-  const { error } = await db.from("news")
+  const { error } = await db!.from("news")
     .update({ title, excerpt, body, cover_url, published })
     .eq("slug", params.slug);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
@@ -35,12 +35,12 @@ export async function PUT(req: NextRequest, { params }: { params: { slug: string
 }
 
 export async function DELETE(_: NextRequest, { params }: { params: { slug: string } }) {
-  const db = createSafeSupabaseServerClient();
+  const db = createServerClient();
   if (!db) return NextResponse.json({ error: "Database connection failed" }, { status: 500 });
   
-  const { data: { user } } = await db.auth.getUser();
+  const { data: { user } } = await db!.auth.getUser();
   if (!user) return NextResponse.json({ error: "auth" }, { status: 401 });
-  const { error } = await db.from("news").delete().eq("slug", params.slug);
+  const { error } = await db!.from("news").delete().eq("slug", params.slug);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ ok: true });
 }

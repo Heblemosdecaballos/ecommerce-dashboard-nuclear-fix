@@ -23,7 +23,7 @@ export default function EmailAuthForm({ defaultMode = "login" as Mode }) {
 
   const signIn = async () => {
     setLoading(true); setNote(null);
-    const { error } = await supa.auth.signInWithPassword({ email, password: pass });
+    const { error } = await supa!.auth.signInWithPassword({ email, password: pass });
     setLoading(false);
     if (error) {
       // Mensaje más útil cuando la cuenta no está confirmada
@@ -39,7 +39,7 @@ export default function EmailAuthForm({ defaultMode = "login" as Mode }) {
 
   const signUp = async () => {
     setLoading(true); setNote(null);
-    const { error, data } = await supa.auth.signUp({
+    const { error, data } = await supa!.auth.signUp({
       email,
       password: pass,
       options: { emailRedirectTo: redirectTo },
@@ -59,7 +59,7 @@ export default function EmailAuthForm({ defaultMode = "login" as Mode }) {
 
   const resendConfirmation = async () => {
     setLoading(true);
-    const { error } = await supa.auth.resend({
+    const { error } = await supa!.auth.resend({
       type: "signup",
       email,
       options: { emailRedirectTo: redirectTo },

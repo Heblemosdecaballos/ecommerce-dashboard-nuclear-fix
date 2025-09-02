@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 async function checkAdminAuth() {
   try {
     const supabase = supabaseServer();
-    const { data: { user }, error } = await supabase && supabase.auth.getUser();
+    const { data: { user }, error } = await supabase && supabase!.auth.getUser();
     
     if (!user || error) {
       return null;

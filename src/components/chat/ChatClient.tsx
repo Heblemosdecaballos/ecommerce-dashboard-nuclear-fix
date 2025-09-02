@@ -38,7 +38,7 @@ export default function ChatClient() {
       .subscribe();
 
     return () => {
-      supabase.removeChannel(ch);
+      supabase!.removeChannel(ch);
     };
   }, []);
 
@@ -46,14 +46,14 @@ export default function ChatClient() {
     const msg = text.trim();
     if (!msg) return;
     const supabase = supabaseBrowser();
-    await supabase.from("chat_messages").insert({ content: msg });
+    await supabase!.from("chat_messages").insert({ content: msg });
     setText("");
   }
 
   return (
     <div className="flex h-[60vh] flex-col rounded-xl border border-[#D7D2C7] bg-white">
       <div className="flex-1 space-y-2 overflow-y-auto p-4">
-        {messages.map((m) => (
+        {messages.map((m: any) => (
           <div key={m.id} className="rounded-lg border border-[#E7E2D6] bg-[#F8F5EC] p-2">
             <div className="text-sm">{m.content}</div>
             <div className="mt-1 text-[11px] text-[#14110F]/60">

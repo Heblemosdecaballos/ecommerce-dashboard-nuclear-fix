@@ -3,7 +3,7 @@ import { supabaseServer } from "@/lib/supabase/server";
 
 export async function createThreadAction(formData: FormData): Promise<{ ok: boolean; slug?: string; message?: string }> {
   const supabase = supabaseServer();
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase!.auth.getUser();
   if (!user) return { ok: false, message: "Debes iniciar sesión para crear un foro." };
 
   const title = (formData.get("title") as string)?.trim();

@@ -80,14 +80,14 @@ export default function AddMediaForm({ hallSlug, authorName }: Props) {
         const ext = file.name.includes(".") ? file.name.split(".").pop() : "bin";
 
         // Carpeta por ejemplar si existe; si no, _misc_
-        const horse = horses.find((h) => h.id === horseId);
+        const horse = horses.find((h: any) => h.id === horseId);
         const horseFolder = horse ? slugify(horse.slug || horse.name) : "_misc_";
         const path = `${hallSlug}/${horseFolder}/${crypto.randomUUID()}.${ext}`;
 
-        const { error: upErr } = await supabase.storage.from("hall").upload(path, file, { upsert: false });
+        const { error: upErr } = await supabase!.storage.from("hall").upload(path, file, { upsert: false });
         if (upErr) throw new Error(`StorageError: ${upErr.message}`);
 
-        const { data: publicUrl } = supabase.storage.from("hall").getPublicUrl(path);
+        const { data: publicUrl } = supabase!.storage.from("hall").getPublicUrl(path);
         payload.url = publicUrl.publicUrl;
         payload.storage_path = path;
       }
@@ -121,7 +121,7 @@ export default function AddMediaForm({ hallSlug, authorName }: Props) {
     <form onSubmit={handleSubmit} className="space-y-4">
       {/* Modo */}
       <div className="flex gap-2 text-sm">
-        {(["image","video","youtube"] as const).map((m) => (
+        {(["image","video","youtube"] as const).map((m: any) => (
           <button
             key={m}
             type="button"

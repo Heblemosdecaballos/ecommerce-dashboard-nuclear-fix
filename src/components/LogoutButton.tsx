@@ -4,7 +4,7 @@ import { createSupabaseBrowserClient } from "@/utils/supabase/client";
 export default function LogoutButton() {
   const onClick = async () => {
     const supa = createSupabaseBrowserClient();
-    await supa.auth.signOut();
+    await supa!.auth.signOut();
     window.location.reload();
   };
   return (

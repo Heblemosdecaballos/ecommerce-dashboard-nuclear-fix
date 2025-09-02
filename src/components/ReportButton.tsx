@@ -12,13 +12,13 @@ export default function ReportButton({ postId }: { postId: string }) {
   async function submit() {
     try {
       setSending(true);
-      const { data: { user }, error: uErr } = await supabase.auth.getUser();
+      const { data: { user }, error: uErr } = await supabase!.auth.getUser();
       if (uErr) throw uErr;
       if (!user) throw new Error('Debes iniciar sesión');
 
-      const { error } = await supabase.from('reports').insert({
+      const { error } = await supabase!.from('reports').insert({
         post_id: postId,
-        reporter_id: user.id,
+        reporter_id: user?.id,
         reason: reason.trim(),
       });
       if (error) throw error;

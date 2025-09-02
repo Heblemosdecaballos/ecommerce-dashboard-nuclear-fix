@@ -56,7 +56,7 @@ export async function createHorseAction(payload: Payload) {
   const supabase = createSupabaseServer();
 
   // 1) Validar sesión (RLS)
-  const { data: userData, error: userErr } = await supabase.auth.getUser();
+  const { data: userData, error: userErr } = await supabase!.auth.getUser();
   const user = userData?.user;
   if (userErr || !user) return { ok: false, message: "Debes iniciar sesión." };
 

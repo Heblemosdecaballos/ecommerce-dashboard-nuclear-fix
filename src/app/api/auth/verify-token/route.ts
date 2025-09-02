@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
       
       // Validar que el usuario aún existe en Supabase
       const supabase = supabaseServer();
-      const { data: { user }, error } = await supabase.auth.admin.getUserById(decoded.userId);
+      const { data: { user }, error } = await supabase!.auth.admin.getUserById(decoded.userId);
       
       if (error || !user) {
         return NextResponse.json(
@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
     } catch (jwtError) {
       // Si falla JWT, intentar como token de Supabase
       const supabase = supabaseServer();
-      const { data: { user }, error } = await supabase.auth.getUser(token);
+      const { data: { user }, error } = await supabase!.auth.getUser(token);
       
       if (error || !user) {
         return NextResponse.json(

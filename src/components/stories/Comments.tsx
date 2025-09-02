@@ -39,7 +39,7 @@ export default function Comments({ storyId }: { storyId: string }) {
 
   useEffect(() => {
     (async () => {
-      const { data: { user } } = await sb.auth.getUser();
+      const { data: { user } } = await sb!.auth.getUser();
       setUserId(user?.id ?? null);
       await load();
     })();
@@ -48,7 +48,7 @@ export default function Comments({ storyId }: { storyId: string }) {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    const { data: { user } } = await sb.auth.getUser();
+    const { data: { user } } = await sb!.auth.getUser();
     if (!user) {
       const redirect = encodeURIComponent(window.location.pathname);
       window.location.href = `/auth?redirect=${redirect}`;
@@ -59,7 +59,7 @@ export default function Comments({ storyId }: { storyId: string }) {
     try {
       const { data, error } = await sb
         .from("story_comments")
-        .insert({ story_id: storyId, author_id: user.id, content: text.trim() })
+        .insert({ story_id: storyId, author_id: user?.id, content: text.trim() })
         .select()
         .single();
       if (!error && data) {
@@ -74,14 +74,14 @@ export default function Comments({ storyId }: { storyId: string }) {
 
   async function remove(id: string) {
     // soft delete (is_deleted = true)
-    const { data: { user } } = await sb.auth.getUser();
+    const { data: { user } } = await sb!.auth.getUser();
     if (!user) return;
     // only own comment according to policy
     const { error } = await sb
       .from("story_comments")
       .update({ is_deleted: true, content: "[comentario eliminado]" })
       .eq("id", id)
-      .eq("author_id", user.id);
+      .eq("author_id", user?.id);
     if (!error) setList((l) => l.filter((c) => c.id !== id));
   }
 

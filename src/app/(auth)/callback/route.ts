@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createSafeSupabaseServerClient } from "@/lib/safeSupabaseServer";
+import { createServerClient } from "@/lib/safeSupabaseServer";
 
 export async function GET(req: Request) {
   const url = new URL(req.url);
@@ -8,13 +8,13 @@ export async function GET(req: Request) {
   const to = next && next.startsWith("/") ? next : "/";
 
   if (code) {
-    const supa = createSafeSupabaseServerClient();
+    const supa = createServerClient();
     
     if (!supa) {
       return NextResponse.redirect(new URL("/auth/error", req.url));
     }
     
-    await supa.auth.exchangeCodeForSession(code);
+    await supa!.auth.exchangeCodeForSession(code);
   }
   return NextResponse.redirect(new URL(to, url.origin));
 }

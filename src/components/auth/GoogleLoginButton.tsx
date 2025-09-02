@@ -14,7 +14,7 @@ export default function GoogleButton({ next = '/' }: Props) {
     const supabase = supabaseBrowser()
     const origin = window.location.origin || process.env.NEXT_PUBLIC_SITE_URL || 'https://hablandodecaballos.com'
 
-    await supabase.auth.signInWithOAuth({
+    await supabase!.auth.signInWithOAuth({
       provider: 'google',
       options: {
         redirectTo: `${origin}/auth/callback?next=${encodeURIComponent(next)}`,

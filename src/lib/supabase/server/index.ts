@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     const {
       data: { user },
       error: authErr,
-    } = await supabase.auth.getUser();
+    } = await supabase!.auth.getUser();
 
     if (authErr) {
       console.error("[media] auth.getUser error:", authErr);

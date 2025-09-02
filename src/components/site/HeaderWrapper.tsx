@@ -9,7 +9,7 @@ export default async function HeaderWrapper() {
   
   try {
     const supabase = supabaseServer();
-    const { data, error } = await supabase.auth.getUser();
+    const { data, error } = await supabase!.auth.getUser();
     if (!error && data?.user) {
       user = data.user;
     }

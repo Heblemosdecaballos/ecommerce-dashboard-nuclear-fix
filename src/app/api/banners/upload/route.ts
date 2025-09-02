@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
 
     try {
       const supabase = supabaseServer();
-      const { data: { user: authUser }, error: authError } = await supabase.auth.getUser();
+      const { data: { user: authUser }, error: authError } = await supabase!.auth.getUser();
       if (!authError && authUser) {
         user = authUser;
         isAdmin = user.email === process.env.HALL_ADMIN_EMAIL || user.email === 'admin@hablandodecaballos.com';
@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
     try {
       // En un entorno real, subiríamos a Supabase Storage
       // const supabase = supabaseServer();
-      // const { data, error } = await supabase.storage
+      // const { data, error } = await supabase!.storage
       //   .from('banner-uploads')
       //   .upload(filename, file);
 
@@ -148,7 +148,7 @@ export async function DELETE(request: NextRequest) {
 
     try {
       const supabase = supabaseServer();
-      const { data: { user: authUser }, error: authError } = await supabase.auth.getUser();
+      const { data: { user: authUser }, error: authError } = await supabase!.auth.getUser();
       if (!authError && authUser) {
         user = authUser;
         isAdmin = user.email === process.env.HALL_ADMIN_EMAIL || user.email === 'admin@hablandodecaballos.com';
@@ -166,7 +166,7 @@ export async function DELETE(request: NextRequest) {
     try {
       // En un entorno real, eliminaríamos de Supabase Storage
       // const supabase = supabaseServer();
-      // const { error } = await supabase.storage
+      // const { error } = await supabase!.storage
       //   .from('banner-uploads')
       //   .remove([filename]);
 

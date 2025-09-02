@@ -5,7 +5,7 @@ import { supabaseServer } from "@/lib/supabase/server";
 
 async function assertModerator() {
   const supabase = supabaseServer();
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase!.auth.getUser();
   if (!user) return { supabase, user: null, isMod: false };
 
   const { data: me } = await supabase

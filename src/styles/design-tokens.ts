@@ -357,7 +357,7 @@ export const utils = {
     const variables: Record<string, string> = {};
     
     const flatten = (obj: any, path = '') => {
-      Object.keys(obj).forEach(key => {
+      Object.keys(obj).forEach((key: any) => {
         const value = obj[key];
         const newPath = path ? `${path}-${key}` : key;
         
@@ -377,7 +377,7 @@ export const utils = {
   generateUtilityClasses: () => {
     return {
       // Clases de color
-      colors: Object.entries(colors).reduce((acc, [category, values]) => {
+      colors: Object.entries(colors).reduce((acc: any, [category, values]: any) => {
         if (typeof values === 'object') {
           Object.entries(values).forEach(([shade, value]) => {
             acc[`text-${category}-${shade}`] = { color: value };
@@ -389,7 +389,7 @@ export const utils = {
       }, {} as Record<string, any>),
       
       // Clases de espaciado
-      spacing: Object.entries(spacing).reduce((acc, [key, value]) => {
+      spacing: Object.entries(spacing).reduce((acc: any, [key, value]: any) => {
         acc[`p-${key}`] = { padding: value };
         acc[`m-${key}`] = { margin: value };
         acc[`px-${key}`] = { paddingLeft: value, paddingRight: value };

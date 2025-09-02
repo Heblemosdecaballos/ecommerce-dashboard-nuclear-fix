@@ -18,7 +18,7 @@ export async function createStory(fd: FormData): Promise<ActionResp> {
     const supa = createSupabaseServerClient();
     const {
       data: { user },
-    } = await supa.auth.getUser();
+    } = await supa!.auth.getUser();
     if (!user) return { ok: false, error: "Debes iniciar sesión." };
 
     let cover_path: string | null = null;
@@ -28,11 +28,11 @@ export async function createStory(fd: FormData): Promise<ActionResp> {
       if (file && file.size > 0) {
         const safeName = (file.name || "cover").replace(/\s+/g, "_");
         const path = `stories/${user.id}/${Date.now()}-${safeName}`;
-        const { error: upErr } = await supa.storage
+        const { error: upErr } = await supa!.storage
           .from("stories")
           .upload(path, file, { upsert: true });
         if (upErr) return { ok: false, error: upErr.message };
-        const { data } = supa.storage.from("stories").getPublicUrl(path);
+        const { data } = supa!.storage.from("stories").getPublicUrl(path);
         cover_path = data.publicUrl;
       }
     } else {
@@ -46,7 +46,7 @@ export async function createStory(fd: FormData): Promise<ActionResp> {
         title,
         content,
         cover_path,
-        author_id: user.id,
+        author_id: user?.id,
       })
       .select("id")
       .single();

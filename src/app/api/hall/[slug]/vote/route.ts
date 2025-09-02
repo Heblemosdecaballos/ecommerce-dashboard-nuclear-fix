@@ -27,7 +27,7 @@ export async function POST(req: Request) {
     const {
       data: { user },
       error: authErr,
-    } = await supabase.auth.getUser();
+    } = await supabase!.auth.getUser();
     if (authErr) return NextResponse.json({ error: "AuthError: " + authErr.message }, { status: 401 });
     if (!user)   return NextResponse.json({ error: "No autenticado" }, { status: 401 });
 
@@ -47,11 +47,11 @@ export async function POST(req: Request) {
     if (findErr) return NextResponse.json({ error: "DBError: " + findErr.message }, { status: 400 });
 
     if (existing) {
-      const { error: delErr } = await supabase.from("hall_votes").delete().eq("id", existing.id);
+      const { error: delErr } = await supabase!.from("hall_votes").delete().eq("id", existing.id);
       if (delErr) return NextResponse.json({ error: "DBError: " + delErr.message }, { status: 400 });
       return NextResponse.json({ toggled: "off" });
     } else {
-      const { error: insErr } = await supabase.from("hall_votes").insert({
+      const { error: insErr } = await supabase!.from("hall_votes").insert({
         hall_slug,
         media_id,
         voter_id: user.id,

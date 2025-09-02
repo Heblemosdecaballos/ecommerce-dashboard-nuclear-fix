@@ -34,7 +34,7 @@ export async function uploadMediaAction(formData: FormData) {
   const supabase = createSupabaseServer();
 
   // Sesión
-  const { data: userData, error: userErr } = await supabase.auth.getUser();
+  const { data: userData, error: userErr } = await supabase!.auth.getUser();
   const user = userData?.user;
   if (userErr || !user) return { ok: false, message: "Debes iniciar sesión para subir media." };
 
@@ -54,13 +54,13 @@ export async function uploadMediaAction(formData: FormData) {
   const storagePath = `horses/${horseId}/${uuid}.${ext}`;
 
   // Subir al bucket público
-  const { error: upErrPub } = await supabase.storage
+  const { error: upErrPub } = await supabase!.storage
     .from("hall-public")
     .upload(storagePath, file, { cacheControl: "3600", upsert: false, contentType: mime });
   if (upErrPub) return { ok: false, message: `Error subiendo (público): ${upErrPub.message}` };
 
   // URL pública
-  const { data: pub } = supabase.storage.from("hall-public").getPublicUrl(storagePath);
+  const { data: pub } = supabase!.storage.from("hall-public").getPublicUrl(storagePath);
   const public_url = pub.publicUrl;
 
   // Registrar en DB
@@ -97,7 +97,7 @@ export async function setCoverAction(payload: {
 
   const supabase = createSupabaseServer();
 
-  const { data: userData, error: userErr } = await supabase.auth.getUser();
+  const { data: userData, error: userErr } = await supabase!.auth.getUser();
   const user = userData?.user;
   if (userErr || !user) return { ok: false, message: "Debes iniciar sesión." };
 
@@ -145,7 +145,7 @@ export async function deleteMediaAction(payload: {
   const { mediaId, horseId, andarSlug, horseSlug } = payload;
 
   const supabase = createSupabaseServer();
-  const { data: userData, error: userErr } = await supabase.auth.getUser();
+  const { data: userData, error: userErr } = await supabase!.auth.getUser();
   const user = userData?.user;
   if (userErr || !user) return { ok: false, message: "Debes iniciar sesión." };
 
@@ -160,7 +160,7 @@ export async function deleteMediaAction(payload: {
   }
 
   // Borrar archivo del bucket público
-  const { error: remErr } = await supabase.storage
+  const { error: remErr } = await supabase!.storage
     .from("hall-public")
     .remove([row.storage_path]);
   if (remErr) {
@@ -169,7 +169,7 @@ export async function deleteMediaAction(payload: {
   }
 
   // Borrar registro
-  const { error: delErr } = await supabase.from("horse_media").delete().eq("id", mediaId);
+  const { error: delErr } = await supabase!.from("horse_media").delete().eq("id", mediaId);
   if (delErr) return { ok: false, message: `No se pudo borrar media: ${delErr.message}` };
 
   revalidatePath(`/hall/${andarSlug}/${horseSlug}`);
@@ -184,7 +184,7 @@ export async function voteAction(payload: { horseId: string; value: 1 | -1 }) {
   if (value !== 1 && value !== -1) return { ok: false, message: "Valor de voto inválido." };
 
   const supabase = createSupabaseServer();
-  const { data: userData } = await supabase.auth.getUser();
+  const { data: userData } = await supabase!.auth.getUser();
   const user = userData?.user;
   if (!user) return { ok: false, message: "Debes iniciar sesión." };
 
@@ -208,7 +208,7 @@ export async function commentAction(payload: { horseId: string; text: string }) 
   if (!text?.trim()) return { ok: false, message: "Comentario vacío." };
 
   const supabase = createSupabaseServer();
-  const { data: userData } = await supabase.auth.getUser();
+  const { data: userData } = await supabase!.auth.getUser();
   const user = userData?.user;
   if (!user) return { ok: false, message: "Debes iniciar sesión." };
 

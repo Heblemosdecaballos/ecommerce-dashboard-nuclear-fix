@@ -10,7 +10,7 @@ export async function GET(req: Request) {
   if (code) {
     const supabase = createSupabaseServer();
     // Crea la sesión en tus cookies (server-side)
-    await supabase.auth.exchangeCodeForSession(code);
+    await supabase!.auth.exchangeCodeForSession(code);
   }
 
   return NextResponse.redirect(new URL(next, req.url));

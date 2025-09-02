@@ -44,11 +44,11 @@ export function useSocket(options: UseSocketOptions = {}) {
 
     // Eventos de usuarios
     socket.on(SOCKET_EVENTS.USER_ONLINE, (user: UserData) => {
-      setConnectedUsers(prev => [...prev.filter(u => u.id !== user.id), user]);
+      setConnectedUsers(prev => [...prev.filter((u: any) => u.id !== user.id), user]);
     });
 
     socket.on(SOCKET_EVENTS.USER_OFFLINE, ({ userId }: { userId: string }) => {
-      setConnectedUsers(prev => prev.filter(u => u.id !== userId));
+      setConnectedUsers(prev => prev.filter((u: any) => u.id !== userId));
     });
 
     return () => {

@@ -19,7 +19,7 @@ export async function GET() {
   try {
     // Test conexión a Supabase
     const supabase = supabaseServer();
-    const { data, error } = await supabase.from("hall_horses").select("count", { count: "exact" });
+    const { data, error } = await supabase!.from("hall_horses").select("count", { count: "exact" });
     
     const dbStatus = error ? "error" : "ok";
     

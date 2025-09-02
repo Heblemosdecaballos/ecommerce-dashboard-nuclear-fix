@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 
 export async function updateSession(req: NextRequest, res: NextResponse) {
-  const supa = createSafeSupabaseServerClient(
+  const supa = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
@@ -13,5 +13,5 @@ export async function updateSession(req: NextRequest, res: NextResponse) {
       } as any,
     }
   );
-  await supa.auth.getUser();
+  await supa!.auth.getUser();
 }

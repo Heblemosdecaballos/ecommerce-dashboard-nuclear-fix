@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
 
     try {
       const supabase = supabaseServer();
-      const { data: { user: authUser }, error: authError } = await supabase.auth.getUser();
+      const { data: { user: authUser }, error: authError } = await supabase!.auth.getUser();
       if (!authError && authUser) {
         user = authUser;
         isAdmin = user.email === process.env.HALL_ADMIN_EMAIL || user.email === 'admin@hablandodecaballos.com';
@@ -171,12 +171,12 @@ export async function GET(request: NextRequest) {
 
     // Filtrar por banner específico si se solicita
     if (banner_id && stats.banners) {
-      stats.banners = stats.banners.filter(b => b.banner_id === banner_id);
+      stats.banners = stats.banners.filter((b: any) => b.banner_id === banner_id);
     }
 
     // Filtrar por posición si se solicita
     if (position && stats.banners) {
-      stats.banners = stats.banners.filter(b => b.position === position);
+      stats.banners = stats.banners.filter((b: any) => b.position === position);
     }
 
     return NextResponse.json({

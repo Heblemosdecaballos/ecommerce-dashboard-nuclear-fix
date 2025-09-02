@@ -19,7 +19,7 @@ export default function SiteHeader() {
   const pathname = usePathname();
 
   useEffect(() => {
-    sb.auth.getUser().then(({ data }) => setUser(data.user ?? null));
+    sb!.auth.getUser().then(({ data }) => setUser(data.user ?? null));
   }, [sb]);
 
   const redirect = encodeURIComponent(pathname || "/");

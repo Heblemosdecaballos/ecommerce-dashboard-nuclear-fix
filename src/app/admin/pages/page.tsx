@@ -28,7 +28,7 @@ export default function PagesAdmin() {
   }
 
   useEffect(() => {
-    supabase && supabase.auth.getUser().then(({ data }) => setUser(data.user ?? null));
+    supabase && supabase!.auth.getUser().then(({ data }) => setUser(data.user ?? null));
     load();
   }, []);
 
@@ -49,7 +49,7 @@ export default function PagesAdmin() {
   async function saveEdit() {
     if (!editing) return;
     setSaving(true);
-    const res = await fetch(`/api/pages/${editing.slug}`, {
+    const res = await fetch(`/api/pages/${editing!.slug}`, {
       method: "PUT", headers: { "Content-Type": "application/json" },
       body: JSON.stringify(editing)
     });
@@ -115,17 +115,17 @@ export default function PagesAdmin() {
       <section className="space-y-2">
         <h2 className="font-medium">Mis páginas</h2>
         <div className="space-y-3">
-          {items.map(p => (
+          {items.map((p: any) => (
             <div key={p.slug} className="rounded border p-3">
               {editing?.slug === p.slug ? (
                 <div className="space-y-2">
-                  <input className="w-full rounded border p-2" value={editing.title}
+                  <input className="w-full rounded border p-2" value={editing!.title}
                     onChange={(e)=>setEditing({...editing!, title: e.target.value})} />
                   <textarea rows={8} className="w-full rounded border p-2"
-                    value={editing.body}
+                    value={editing!.body}
                     onChange={(e)=>setEditing({...editing!, body: e.target.value})} />
                   <label className="text-sm">
-                    <input type="checkbox" checked={editing.published}
+                    <input type="checkbox" checked={editing!.published}
                       onChange={(e)=>setEditing({...editing!, published: e.target.checked})} />{" "}
                     Publicada
                   </label>

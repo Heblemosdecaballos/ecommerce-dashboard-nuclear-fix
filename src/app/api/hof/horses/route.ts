@@ -25,7 +25,7 @@ export async function POST(req: Request) {
   const supabase = createSupabaseServer();
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await supabase!.auth.getUser();
   if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
 
   const { hall_slug, name, owner_name } = await req.json();

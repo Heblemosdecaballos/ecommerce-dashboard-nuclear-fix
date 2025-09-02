@@ -20,13 +20,13 @@ export default function LikeButton({
 
   useEffect(() => {
     (async () => {
-      const { data: { user } } = await sb.auth.getUser();
+      const { data: { user } } = await sb!.auth.getUser();
       if (!user) { setLiked(false); return; }
       const { error } = await sb
         .from("story_likes")
         .select("*", { head: true, count: "exact" })
         .eq("story_id", storyId)
-        .eq("user_id", user.id);
+        .eq("user_id", user?.id);
       setLiked(!error); // si no hubo error en head, hay fila o no; head no devuelve error aunque no exista.
       // head no dice si existe; hacemos alternativa:
       const { count: c } = await sb
@@ -43,7 +43,7 @@ export default function LikeButton({
   const toggle = async () => {
     if (loading) return;
     setLoading(true);
-    const { data: { user } } = await sb.auth.getUser();
+    const { data: { user } } = await sb!.auth.getUser();
     if (!user) {
       const redirect = encodeURIComponent(window.location.pathname);
       window.location.href = `/auth?redirect=${redirect}`;
@@ -51,11 +51,11 @@ export default function LikeButton({
     }
     try {
       if (liked) {
-        await sb.from("story_likes").delete().eq("story_id", storyId).eq("user_id", user.id);
+        await sb!.from("story_likes").delete().eq("story_id", storyId).eq("user_id", user?.id);
         setLiked(false);
         setCount((v) => Math.max(0, v - 1));
       } else {
-        await sb.from("story_likes").insert({ story_id: storyId, user_id: user.id });
+        await sb!.from("story_likes").insert({ story_id: storyId, user_id: user?.id });
         setLiked(true);
         setCount((v) => v + 1);
       }

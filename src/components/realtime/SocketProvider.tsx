@@ -49,7 +49,7 @@ export function SocketProvider({ children }: SocketProviderProps) {
     );
 
     const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase!.auth.getUser();
       if (user) {
         setUser({
           id: user.id,
@@ -62,7 +62,7 @@ export function SocketProvider({ children }: SocketProviderProps) {
     getUser();
 
     // Escuchar cambios de autenticación
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = supabase!.auth.onAuthStateChange((event, session) => {
       if (session?.user) {
         setUser({
           id: session.user.id,

@@ -25,13 +25,13 @@ export default async function ModeracionPage({
   const supabase = supabaseServer();
 
   // auth & mod check
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase!.auth.getUser();
   if (!user) notFound();
 
   const { data: me } = await supabase
     .from("profiles")
     .select("is_moderator")
-    .eq("id", user.id)
+    .eq("id", user?.id)
     .single();
 
   if (!me?.is_moderator) notFound();
@@ -62,12 +62,12 @@ export default async function ModeracionPage({
 
   // Enriquecer con títulos/links
   const threadTargetIds = (reports ?? [])
-    .filter(r => r.target_type === "thread")
-    .map(r => r.target_id);
+    .filter((r: any) => r.target_type === "thread")
+    .map((r: any) => r.target_id);
 
   const postTargetIds = (reports ?? [])
-    .filter(r => r.target_type === "post")
-    .map(r => r.target_id);
+    .filter((r: any) => r.target_type === "post")
+    .map((r: any) => r.target_id);
 
   const threadsById = new Map<string, any>();
   if (threadTargetIds.length) {
@@ -146,7 +146,7 @@ export default async function ModeracionPage({
             </tr>
           </thead>
           <tbody>
-            {(reports ?? []).map((r) => {
+            {(reports ?? []).map((r: any) => {
               let link = "#";
               let title = "";
               let hidden = false;
@@ -193,7 +193,7 @@ export default async function ModeracionPage({
 
       {/* Paginación simple */}
       <div className="flex items-center justify-center gap-2">
-        {Array.from({ length: pages }, (_, i) => i + 1).map((p) => {
+        {Array.from({ length: pages }, (_, i) => i + 1).map((p: any) => {
           const url = new URL(`${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/foros/moderacion`);
           if (status) url.searchParams.set("status", status);
           if (q) url.searchParams.set("q", q);

@@ -16,7 +16,7 @@ export function supabaseServer() {
   }
 
   const cookieStore = cookies();
-  return createSafeSupabaseServerClient(
+  return createServerClient(
     supabaseUrl,
     supabaseAnonKey,
     {

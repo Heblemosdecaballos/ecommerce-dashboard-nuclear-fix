@@ -21,7 +21,7 @@ export async function createForum(formData: FormData): Promise<void> {
   const {
     data: userData,
     error: userErr,
-  } = await supa.auth.getUser();
+  } = await supa!.auth.getUser();
 
   if (userErr) {
     redirectWithError(userErr.message);
@@ -61,7 +61,7 @@ export async function createForum(formData: FormData): Promise<void> {
   // Nombre visible del autor (user_metadata.full_name > email > 'Usuario')
   const author_name =
     (user.user_metadata && (user.user_metadata.full_name || user.user_metadata.name)) ||
-    user.email ||
+    user?.email ||
     "Usuario";
 
   // 3) Insert en threads
@@ -71,7 +71,7 @@ export async function createForum(formData: FormData): Promise<void> {
       title,
       category,
       tags,
-      author_id: user.id,
+      author_id: user?.id,
       author_name, // 👈 nuevo
       status: "open",
     })
@@ -84,9 +84,9 @@ export async function createForum(formData: FormData): Promise<void> {
 
   // 4) (Opcional) Crear primer comentario con "content"
   if (content) {
-    const { error: postErr } = await supa.from("thread_comments").insert({
+    const { error: postErr } = await supa!.from("thread_comments").insert({
       thread_id: data!.id,
-      author_id: user.id,
+      author_id: user?.id,
       author_name, // 👈 nuevo
       text: content,
     });

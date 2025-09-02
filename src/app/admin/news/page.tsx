@@ -31,7 +31,7 @@ export default function NewsAdmin() {
   }
 
   useEffect(() => {
-    sb && sb.auth.getUser().then(({ data }) => setUser(data.user ?? null));
+    sb && sb!.auth.getUser().then(({ data }) => setUser(data.user ?? null));
     load();
   }, []);
 
@@ -45,10 +45,10 @@ export default function NewsAdmin() {
       return "";
     }
     
-    const { error } = await sb.storage.from("news").upload(path, file, { upsert: false });
+    const { error } = await sb!.storage.from("news").upload(path, file, { upsert: false });
     setUploading(false);
     if (error) { alert(error.message); return ""; }
-    const { data } = sb.storage.from("news").getPublicUrl(path);
+    const { data } = sb!.storage.from("news").getPublicUrl(path);
     return data.publicUrl as string;
   }
 
@@ -66,7 +66,7 @@ export default function NewsAdmin() {
   async function saveEdit() {
     if (!editing) return;
     setSaving(true);
-    const r = await fetch(`/api/news/${editing.slug}`, {
+    const r = await fetch(`/api/news/${editing!.slug}`, {
       method: "PUT", headers: { "Content-Type": "application/json" },
       body: JSON.stringify(editing)
     });
@@ -158,21 +158,21 @@ export default function NewsAdmin() {
       <section className="space-y-2">
         <h2 className="font-medium">Mis noticias</h2>
         <div className="space-y-3">
-          {items.map(n => (
+          {items.map((n: any) => (
             <div key={n.slug} className="rounded border p-3">
               {editing?.slug === n.slug ? (
                 <div className="space-y-2">
-                  <input className="w-full rounded border p-2" value={editing.title}
+                  <input className="w-full rounded border p-2" value={editing!.title}
                     onChange={e=>setEditing({...editing!, title: e.target.value})} />
-                  <input className="w-full rounded border p-2" value={editing.excerpt ?? ""}
+                  <input className="w-full rounded border p-2" value={editing!.excerpt ?? ""}
                     onChange={e=>setEditing({...editing!, excerpt: e.target.value})} placeholder="Extracto..." />
                   <textarea rows={8} className="w-full rounded border p-2"
-                    value={editing.body}
+                    value={editing!.body}
                     onChange={e=>setEditing({...editing!, body: e.target.value})} />
-                  <input className="w-full rounded border p-2" value={editing.cover_url ?? ""}
+                  <input className="w-full rounded border p-2" value={editing!.cover_url ?? ""}
                     onChange={e=>setEditing({...editing!, cover_url: e.target.value})} placeholder="URL portada" />
                   <label className="text-sm">
-                    <input type="checkbox" checked={editing.published}
+                    <input type="checkbox" checked={editing!.published}
                       onChange={e=>setEditing({...editing!, published: e.target.checked})} /> Publicada
                   </label>
                   <div className="flex gap-2">

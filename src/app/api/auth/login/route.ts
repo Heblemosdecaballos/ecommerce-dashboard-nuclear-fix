@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     }
     
     // Intentar login con Supabase
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase!.auth.signInWithPassword({
       email,
       password
     });

@@ -45,7 +45,7 @@ export default function Pagination({
         </>
       )}
 
-      {items.map((p) => (
+      {items.map((p: any) => (
         <button
           key={p}
           onClick={() => go(p)}

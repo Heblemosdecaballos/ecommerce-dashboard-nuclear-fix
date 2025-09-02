@@ -1,11 +1,11 @@
 // app/api/stories/[id]/comments/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { createSafeSupabaseServerClient } from "@/lib/safeSupabaseServer";
+import { createServerClient } from "@/lib/safeSupabaseServer";
 
-// Función supa() removida - usando createSafeSupabaseServerClient() directamente
+// Función supa() removida - usando createServerClient() directamente
 
 export async function GET(_: NextRequest, { params }: { params: { id: string } }) {
-  const supabase = createSafeSupabaseServerClient();
+  const supabase = createServerClient();
 
   // Si Supabase no está disponible, retornar null o fallback
   if (!supabase) {
@@ -21,19 +21,19 @@ export async function GET(_: NextRequest, { params }: { params: { id: string } }
 }
 
 export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
-  const supabase = createSafeSupabaseServerClient();
+  const supabase = createServerClient();
 
   // Si Supabase no está disponible, retornar null o fallback
   if (!supabase) {
     return NextResponse.json({ error: "Servicio no disponible" }, { status: 503 });
   }
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase!.auth.getUser();
   if (!user) return NextResponse.json({ error: "auth" }, { status: 401 });
 
   const { body, parent_id } = await req.json();
   if (!body || !body.trim()) return NextResponse.json({ error: "El comentario no puede ir vacío" }, { status: 400 });
 
-  const { error } = await supabase.from("story_comments")
+  const { error } = await supabase!.from("story_comments")
     .insert({ story_id: params.id, author_id: user.id, body, parent_id: parent_id ?? null });
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });

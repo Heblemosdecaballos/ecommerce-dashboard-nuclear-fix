@@ -1,10 +1,10 @@
 // components/ads/AdSlot.tsx
-import { createSafeSupabaseServerClient, isSupabaseAvailable } from "@/lib/safeSupabaseServer";
+import { createServerClient, isSupabaseAvailable } from "@/lib/safeSupabaseServer";
 
 type Props = { slot: string; className?: string };
 
 export default async function AdSlot({ slot, className = "" }: Props) {
-  const supabase = createSafeSupabaseServerClient();
+  const supabase = createServerClient();
 
   // Si Supabase no está disponible, retornar null o fallback
   if (!supabase) {

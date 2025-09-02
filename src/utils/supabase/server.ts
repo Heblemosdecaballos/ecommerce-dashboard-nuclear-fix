@@ -4,8 +4,8 @@
 // `createSupabaseServerClient`, `createSupabaseServerClientReadOnly` y `createClient`.
 
 import { 
-  createSafeSupabaseServerClient, 
-  createSafeSupabaseServerClientReadOnly,
+  createServerClient, 
+  createServerClientReadOnly,
   supabaseServer as safeSupabaseServer,
   createSupabaseServerClient as safeCreateSupabaseServerClient,
   createClient as safeCreateClient
@@ -16,7 +16,7 @@ import {
  * Uso común en Server Actions.
  */
 export function supabaseServer() {
-  return createSafeSupabaseServerClient();
+  return createServerClient();
 }
 
 /**
@@ -29,7 +29,7 @@ export const createSupabaseServerClient = supabaseServer;
  * Útil para lecturas donde no quieres mutar la respuesta.
  */
 export function createSupabaseServerClientReadOnly() {
-  return createSafeSupabaseServerClientReadOnly();
+  return createServerClientReadOnly();
 }
 
 /**

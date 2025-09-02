@@ -23,7 +23,7 @@ export default function SupabaseUploader({ bucket, folder = "", postUrl, onDone 
       const ts = Date.now();
       const path = cleanFolder ? `${cleanFolder}/${ts}-${file.name}` : `${ts}-${file.name}`;
 
-      const { error } = await supa.storage.from(bucket).upload(path, file, {
+      const { error } = await supa!.storage.from(bucket).upload(path, file, {
         cacheControl: "3600",
         upsert: false,
         contentType: file.type || `application/octet-stream`,

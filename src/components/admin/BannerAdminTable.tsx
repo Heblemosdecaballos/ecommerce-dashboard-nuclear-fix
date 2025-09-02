@@ -51,7 +51,7 @@ export default function BannerAdminTable() {
       console.log(`Toggle banner ${bannerId} from ${currentStatus} to ${!currentStatus}`);
       
       // Actualizar estado local
-      setBanners(prev => prev.map(banner => 
+      setBanners(prev => prev.map((banner: any) => 
         banner.id === bannerId 
           ? { ...banner, is_active: !currentStatus }
           : banner
@@ -71,7 +71,7 @@ export default function BannerAdminTable() {
       console.log(`Delete banner ${bannerId}`);
       
       // Actualizar estado local
-      setBanners(prev => prev.filter(banner => banner.id !== bannerId));
+      setBanners(prev => prev.filter((banner: any) => banner.id !== bannerId));
     } catch (err) {
       console.error('Error deleting banner:', err);
     }

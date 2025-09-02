@@ -18,11 +18,11 @@ export default function NavBar() {
   useEffect(() => {
     let mounted = true;
     (async () => {
-      const { data } = await supabase.auth.getUser();
+      const { data } = await supabase!.auth.getUser();
       if (!mounted) return;
       setUser(data.user ?? null);
     })();
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+    const { data: sub } = supabase!.auth.onAuthStateChange((_e, session) => {
       setUser(session?.user ?? null);
     });
     return () => {
@@ -34,7 +34,7 @@ export default function NavBar() {
   async function handleLogout() {
     setBusy(true);
     try {
-      await supabase.auth.signOut();
+      await supabase!.auth.signOut();
       router.refresh();
     } finally {
       setBusy(false);

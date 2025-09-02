@@ -11,7 +11,7 @@ export default function GoogleButton({ next = '/' }: { next?: string }) {
     setLoading(true)
     try {
       const supabase = createSupabaseBrowserClient()
-      const { error } = await supabase.auth.signInWithOAuth({
+      const { error } = await supabase!.auth.signInWithOAuth({
         provider: 'google',
         options: {
           redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?next=${encodeURIComponent(next)}`,

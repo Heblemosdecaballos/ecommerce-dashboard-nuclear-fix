@@ -1,12 +1,12 @@
 // app/noticias/[slug]/page.tsx
 import type { Metadata } from "next";
-import { createSafeSupabaseServerClient } from "@/lib/safeSupabaseServer";
+import { createServerClient } from "@/lib/safeSupabaseServer";
 
-// Función supa() removida - usando createSafeSupabaseServerClient() directamente
+// Función supa() removida - usando createServerClient() directamente
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const db = createSafeSupabaseServerClient();
-  const { data: n } = await db.from("news").select("title,excerpt,cover_url").eq("slug", params.slug).maybeSingle();
+  const db = createServerClient();
+  const { data: n } = await db!.from("news").select("title,excerpt,cover_url").eq("slug", params.slug).maybeSingle();
   const title = n?.title ? `${n.title} · Noticias · Hablando de Caballos` : "Noticias · Hablando de Caballos";
   const description = n?.excerpt ?? undefined;
   return {
@@ -16,8 +16,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export default async function NewsDetail({ params }: { params: { slug: string } }) {
-  const db = createSafeSupabaseServerClient();
-  const { data: n } = await db.from("news").select("*").eq("slug", params.slug).maybeSingle();
+  const db = createServerClient();
+  const { data: n } = await db!.from("news").select("*").eq("slug", params.slug).maybeSingle();
   if (!n) return <main className="mx-auto max-w-3xl p-4">No encontrada.</main>;
 
   return (

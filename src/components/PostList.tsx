@@ -18,25 +18,25 @@ export default function PostList({ threadId, archived }: { threadId: string; arc
 
   useEffect(()=>{
     const load = async ()=> {
-      const { data } = await supabase.from('posts').select('*').eq('thread_id', threadId).order('created_at', { ascending: true })
+      const { data } = await supabase!.from('posts').select('*').eq('thread_id', threadId).order('created_at', { ascending: true })
       setPosts((data||[]) as any)
     }
     load()
-    const channel = supabase.channel('posts-'+threadId)
+    const channel = supabase!.channel('posts-'+threadId)
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'posts', filter: `thread_id=eq.${threadId}` }, (p)=>{
         setPosts(prev => [...prev, p.new as any])
       })
       .subscribe()
-    return ()=> { supabase.removeChannel(channel) }
+    return ()=> { supabase!.removeChannel(channel) }
   }, [threadId])
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!content.trim()) return
     setLoading(true)
-    const { data: { user } } = await supabase.auth.getUser()
+    const { data: { user } } = await supabase!.auth.getUser()
     const author_id = user?.id ?? null
-    const { error } = await supabase.from('posts').insert({ thread_id: threadId, content, author_id })
+    const { error } = await supabase!.from('posts').insert({ thread_id: threadId, content, author_id })
     setLoading(false)
     if (error) return alert(error.message)
     setContent('')
@@ -48,7 +48,7 @@ export default function PostList({ threadId, archived }: { threadId: string; arc
       <div className="bg-white rounded-2xl p-5 shadow-sm border">
         <h3 className="font-semibold mb-3">Respuestas</h3>
         <ul className="space-y-4">
-          {posts.map(p => (
+          {posts.map((p: any) => (
             <li key={p.id} className="border rounded-xl p-3 bg-neutral-50">
               <div className="text-sm text-neutral-600">{new Date(p.created_at).toLocaleString('es-CO')}</div>
               <div className="mt-1 whitespace-pre-wrap">{p.content}</div>

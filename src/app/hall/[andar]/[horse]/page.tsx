@@ -28,9 +28,9 @@ export default async function HorseDetail({ params }: { params: { andar: string;
     .from("hall_media").select("*")
     .eq("horse_id", horse.id).order("created_at", { ascending: false }).limit(100);
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase!.auth.getUser();
   const isAdmin = isAdminEmail(user?.email);
-  const andarName = ANDARES.find(a => a.slug === andar)?.name;
+  const andarName = ANDARES.find((a: any) => a.slug === andar)?.name;
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
@@ -68,7 +68,7 @@ export default async function HorseDetail({ params }: { params: { andar: string;
           <p className="text-neutral-700">Aún no hay media para este ejemplar.</p>
         ) : (
           <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {media!.map(m => {
+            {media!.map((m: any) => {
               const isImg = m.type === "image";
               const isVid = m.type === "video";
               const isDoc = m.type === "doc";

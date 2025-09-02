@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
     let user = null;
     try {
       const supabase = supabaseServer();
-      const { data: { user: authUser }, error: authError } = await supabase.auth.getUser();
+      const { data: { user: authUser }, error: authError } = await supabase!.auth.getUser();
       if (!authError && authUser) {
         user = authUser;
       }
