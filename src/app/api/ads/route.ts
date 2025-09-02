@@ -7,7 +7,7 @@ import { createSafeSupabaseServerClient } from "@/lib/safeSupabaseServer";
 // POST -> crear anuncio
 // Body: { slot, image_url?, link_url?, html?, active? }
 export async function POST(req: NextRequest) {
-  const db = supa();
+  const db = createSafeSupabaseServerClient();
   const { data: { user } } = await db.auth.getUser();
   if (!user) return NextResponse.json({ error: "auth" }, { status: 401 });
 
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
 
 // GET -> lista anuncios (público: solo activos). ?all=1 requiere login
 export async function GET(req: NextRequest) {
-  const db = supa();
+  const db = createSafeSupabaseServerClient();
   const all = new URL(req.url).searchParams.get("all") === "1";
 
   if (all) {

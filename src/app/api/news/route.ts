@@ -6,7 +6,7 @@ import { createSafeSupabaseServerClient } from "@/lib/safeSupabaseServer";
 
 // GET -> lista publicadas (público) | ?all=1 requiere login (RLS limita por autor)
 export async function GET(req: NextRequest) {
-  const db = supa();
+  const db = createSafeSupabaseServerClient();
   const all = new URL(req.url).searchParams.get("all") === "1";
   if (all) {
     const { data: { user } } = await db.auth.getUser();
@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
 
 // POST -> crear noticia
 export async function POST(req: NextRequest) {
-  const db = supa();
+  const db = createSafeSupabaseServerClient();
   const { data: { user } } = await db.auth.getUser();
   if (!user) return NextResponse.json({ error: "auth" }, { status: 401 });
   const { slug, title, excerpt, body, cover_url, published = true } = await req.json();
