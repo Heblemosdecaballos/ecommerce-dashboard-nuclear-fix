@@ -60,7 +60,8 @@ export default function NavBar() {
             </span>
           </Link>
           <div className="hidden sm:flex items-center gap-4 text-sm" style={{ color: 'var(--brand-muted)' }}>
-            <Link href="/threads" className="hover:underline">Foro</Link>
+            <Link href="/foros" className="hover:underline">Foro</Link>
+            <Link href="/hall-of-fame" className="hover:underline">Hall of Fame</Link>
             {/* Agrega más rutas si quieres: */}
             {/* <Link href="/transmisiones" className="hover:underline">Transmisiones</Link> */}
           </div>

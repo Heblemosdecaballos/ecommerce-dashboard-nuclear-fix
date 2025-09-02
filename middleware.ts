@@ -1,6 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { updateSession } from "@/utils/supabase/middleware";
+import { checkAdminAuth } from "@/middleware/adminAuth";
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
@@ -24,6 +25,14 @@ export async function middleware(req: NextRequest) {
   } catch (error) {
     console.error('Supabase session update error:', error);
     // Continue without failing if auth update fails
+  }
+  
+  // Check admin routes protection
+  if (req.nextUrl.pathname.startsWith('/admin')) {
+    const adminCheck = await checkAdminAuth(req);
+    if (adminCheck) {
+      return adminCheck; // Redirect if not authorized
+    }
   }
   
   // Add security headers for all routes

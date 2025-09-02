@@ -1,29 +1,36 @@
-# Ecommerce Dashboard - Nuclear Fix
+# Foro Criollo — Next.js + Supabase (FIX)
 
-Dashboard de ecommerce sin dependencias de Redis para deployment en Vercel.
+## 1) Supabase
+- Ejecuta `supabase/schema.sql` (incluye RPC `increment_views`).
+- Auth → habilita Email (magic link).
+- Pon tu usuario como `admin` en `profiles`.
 
-## Características
-
-- Next.js 14 con App Router
-- Tailwind CSS para estilos
-- Supabase para base de datos
-- Socket.io para tiempo real
-- Sistema de notificaciones push
-- Panel de administración
-
-## Deployment
-
-Este proyecto está configurado para deployment automático en Vercel.
-
-## Desarrollo
-
-```bash
-npm install
-npm run dev
+## 2) Variables
+Crea `.env.local` con:
+```
+NEXT_PUBLIC_SUPABASE_URL=...
+NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+SUPABASE_SERVICE_ROLE_KEY=...
+RESEND_API_KEY=...
+CRON_SECRET=supersecreto_para_vercel
 ```
 
-## Build
-
-```bash
-npm run build
+## 3) Local
 ```
+pnpm i
+pnpm dev
+```
+Home: `/` · Login: `/login` · Admin: `/admin` · Hilo: `/thread/[id]`
+
+## 4) Vercel
+- Variables de entorno → mismas que local.
+- `vercel.json` programa cron a 14:00 UTC (09:00 Bogotá).
+- Probar cron manual:
+```
+curl -i -H "Authorization: Bearer SU_CRON_SECRET" https://SU-DOMINIO.vercel.app/api/cron/digest
+```
+
+## Notas de compatibilidad
+- Alias TS `@/*` configurado en `tsconfig.json` (evita “Cannot find module '@/...'”).
+- Incluido `next-env.d.ts` para TypeScript.
+- Las tarjetas enlazan a `/thread/[id]`.
