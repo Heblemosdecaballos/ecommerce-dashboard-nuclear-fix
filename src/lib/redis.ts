@@ -106,3 +106,18 @@ export const getAllCacheHash = (key: string) =>
   redisClient.getAllCacheHash(key);
 
 export const isRedisEnabled = () => redisClient.isRedisEnabled();
+
+// Función para operaciones Redis seguras con fallback
+export const safeRedisOperation = async <T>(
+  operation: () => Promise<T>,
+  fallback: T
+): Promise<T> => {
+  try {
+    // Como Redis está deshabilitado, siempre devolver el fallback
+    console.log('⚠️ Redis STUB: operación no ejecutada, usando fallback');
+    return fallback;
+  } catch (error) {
+    console.log('⚠️ Redis STUB: error en operación, usando fallback:', error);
+    return fallback;
+  }
+};
