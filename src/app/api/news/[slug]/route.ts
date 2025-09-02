@@ -7,6 +7,8 @@ import { createSafeSupabaseServerClient } from "@/lib/safeSupabaseServer";
 // GET público (si published=true)
 export async function GET(_: NextRequest, { params }: { params: { slug: string } }) {
   const db = createSafeSupabaseServerClient();
+  if (!db) return NextResponse.json({ error: "Database connection failed" }, { status: 500 });
+  
   const { data, error } = await db
     .from("news")
     .select("slug,title,excerpt,body,cover_url,created_at,updated_at,published")
@@ -19,6 +21,8 @@ export async function GET(_: NextRequest, { params }: { params: { slug: string }
 
 export async function PUT(req: NextRequest, { params }: { params: { slug: string } }) {
   const db = createSafeSupabaseServerClient();
+  if (!db) return NextResponse.json({ error: "Database connection failed" }, { status: 500 });
+  
   const { data: { user } } = await db.auth.getUser();
   if (!user) return NextResponse.json({ error: "auth" }, { status: 401 });
 
@@ -32,6 +36,8 @@ export async function PUT(req: NextRequest, { params }: { params: { slug: string
 
 export async function DELETE(_: NextRequest, { params }: { params: { slug: string } }) {
   const db = createSafeSupabaseServerClient();
+  if (!db) return NextResponse.json({ error: "Database connection failed" }, { status: 500 });
+  
   const { data: { user } } = await db.auth.getUser();
   if (!user) return NextResponse.json({ error: "auth" }, { status: 401 });
   const { error } = await db.from("news").delete().eq("slug", params.slug);

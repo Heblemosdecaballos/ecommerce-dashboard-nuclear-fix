@@ -8,6 +8,8 @@ import { createSafeSupabaseServerClient } from "@/lib/safeSupabaseServer";
 // Body: { slot, image_url?, link_url?, html?, active? }
 export async function POST(req: NextRequest) {
   const db = createSafeSupabaseServerClient();
+  if (!db) return NextResponse.json({ error: "Database connection failed" }, { status: 500 });
+  
   const { data: { user } } = await db.auth.getUser();
   if (!user) return NextResponse.json({ error: "auth" }, { status: 401 });
 
@@ -37,6 +39,8 @@ export async function POST(req: NextRequest) {
 // GET -> lista anuncios (público: solo activos). ?all=1 requiere login
 export async function GET(req: NextRequest) {
   const db = createSafeSupabaseServerClient();
+  if (!db) return NextResponse.json({ error: "Database connection failed" }, { status: 500 });
+  
   const all = new URL(req.url).searchParams.get("all") === "1";
 
   if (all) {
