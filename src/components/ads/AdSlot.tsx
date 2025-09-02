@@ -1,0 +1,45 @@
+// components/ads/AdSlot.tsx
+import { createSafeSupabaseServerClient, isSupabaseAvailable } from "@/lib/safeSupabaseServer";
+
+type Props = { slot: string; className?: string };
+
+export default async function AdSlot({ slot, className = "" }: Props) {
+  const supabase = createSafeSupabaseServerClient();
+
+  // Si Supabase no está disponible, retornar null o fallback
+  if (!supabase) {
+    return null;
+  }
+
+  // Si Supabase no está disponible, no mostrar anuncios
+  if (!supabase) {
+    return null;
+  }
+
+  // Tomamos el anuncio activo más reciente para ese slot
+  const { data: ad } = await supabase
+    .from("ads")
+    .select("image_url,link_url,html")
+    .eq("slot", slot)
+    .eq("active", true)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (!ad) return null;
+
+  if (ad.html) {
+    return <div className={className} dangerouslySetInnerHTML={{ __html: ad.html }} />;
+  }
+
+  if (ad.image_url && ad.link_url) {
+    return (
+      <a href={ad.link_url} target="_blank" rel="noopener noreferrer" className={className}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={ad.image_url} alt="Publicidad" className="mx-auto h-auto w-full rounded" />
+      </a>
+    );
+  }
+
+  return null;
+}

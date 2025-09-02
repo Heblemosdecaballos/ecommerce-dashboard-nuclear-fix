@@ -1,0 +1,15 @@
+// /src/utils/supabase/browser.ts
+"use client";
+
+import { createSafeSupabaseBrowserClient } from "@/lib/safeSupabase";
+
+/**
+ * Devuelve un cliente de Supabase para el navegador.
+ * Se usa como: const supabase = supabaseBrowser()
+ */
+export function supabaseBrowser() {
+  return createSafeSupabaseBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+}

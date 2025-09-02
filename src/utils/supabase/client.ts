@@ -1,0 +1,17 @@
+// src/utils/supabase/client.ts
+import { createSafeSupabaseBrowserClient, createSupabaseBrowser as safeBrowser } from "@/lib/safeSupabase";
+
+/**
+ * Cliente de Supabase para usar en componentes "use client".
+ */
+export function createSupabaseBrowserClient() {
+  return createSafeSupabaseBrowserClient();
+}
+
+/**
+ * Alias para compatibilidad con código existente:
+ * Permite importar { createSupabaseBrowser } desde "@/utils/supabase/client"
+ */
+export const createSupabaseBrowser = createSupabaseBrowserClient;
+
+export default createSupabaseBrowserClient;

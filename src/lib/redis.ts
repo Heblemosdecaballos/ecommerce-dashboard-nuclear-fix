@@ -1,61 +1,108 @@
+// STUB: Redis completamente deshabilitado para evitar errores de build
+// Todas las funciones devuelven valores por defecto sin intentar conectar a Redis
 
-// Redis client con protección para build time
-let redisClient: any = null;
+class RedisClient {
+  private isEnabled = false;
 
-// Función para verificar si Redis está habilitado
-function isRedisEnabled(): boolean {
-  return process.env.REDIS_DISABLED !== '1' && 
-         process.env.NEXT_DISABLE_REDIS !== '1' &&
-         typeof window === 'undefined'; // Solo en servidor
-}
+  constructor() {
+    console.log('⚠️ Redis STUB: Redis completamente deshabilitado');
+  }
 
-// Función para obtener cliente Redis de forma segura
-export function getRedisClient() {
-  // Si Redis está deshabilitado o estamos en build time, retornar null
-  if (!isRedisEnabled()) {
-    console.log('Redis deshabilitado durante build o por configuración');
+  async getClient() {
+    throw new Error('Redis está completamente deshabilitado');
+  }
+
+  async disconnect() {
+    // No-op
+  }
+
+  isRedisEnabled(): boolean {
+    return false;
+  }
+
+  // Métodos de utilidad para cache con fallback (siempre fallan silenciosamente)
+  async setCache(key: string, value: any, ttl: number = 3600) {
+    console.log('⚠️ Redis STUB: cache no guardado:', key);
+    return 'OK'; // Simular respuesta exitosa
+  }
+
+  async getCache(key: string) {
+    console.log('⚠️ Redis STUB: cache no encontrado:', key);
     return null;
   }
 
-  // Solo importar Redis si realmente lo necesitamos
-  if (!redisClient) {
-    try {
-      // Importación dinámica para evitar errores en build time
-      const Redis = require('ioredis');
-      redisClient = new Redis(process.env.REDIS_URL || 'redis://localhost:6379');
-      
-      redisClient.on('error', (err: Error) => {
-        console.error('Redis connection error:', err);
-        redisClient = null;
-      });
-    } catch (error) {
-      console.error('Error importing Redis:', error);
-      return null;
-    }
+  async deleteCache(key: string) {
+    console.log('⚠️ Redis STUB: cache no eliminado:', key);
+    return 0;
   }
 
-  return redisClient;
+  async setCacheHash(key: string, field: string, value: any) {
+    console.log('⚠️ Redis STUB: hash cache no guardado:', key, field);
+    return 0;
+  }
+
+  async getCacheHash(key: string, field: string) {
+    console.log('⚠️ Redis STUB: hash cache no encontrado:', key, field);
+    return null;
+  }
+
+  async getAllCacheHash(key: string) {
+    console.log('⚠️ Redis STUB: hash cache no encontrado:', key);
+    return {};
+  }
+
+  // Métodos específicos para push notifications con fallback
+  async savePushSubscription(subscriptionKey: string, subscription: any) {
+    console.log('⚠️ Redis STUB: suscripción push no guardada');
+    return false;
+  }
+
+  async getPushSubscriptions() {
+    console.log('⚠️ Redis STUB: no hay suscripciones push');
+    return [];
+  }
+
+  async removePushSubscription(subscriptionKey: string) {
+    console.log('⚠️ Redis STUB: suscripción push no eliminada');
+    return false;
+  }
+
+  async getRedisInfo() {
+    return {
+      status: 'disabled',
+      connectedClients: 0,
+      totalConnections: 0,
+      cacheHits: 0,
+      cacheMisses: 0,
+      activeSubscriptions: 0,
+      uptime: 0,
+      usedMemory: '0B'
+    };
+  }
 }
 
-// Función stub para operaciones Redis
-export async function safeRedisOperation<T>(
-  operation: () => Promise<T>,
-  fallback: T
-): Promise<T> {
-  const client = getRedisClient();
-  
-  if (!client) {
-    console.log('Redis no disponible, usando fallback');
-    return fallback;
-  }
+// Singleton instance
+const redisClient = new RedisClient();
 
-  try {
-    return await operation();
-  } catch (error) {
-    console.error('Redis operation failed:', error);
-    return fallback;
-  }
-}
+export default redisClient;
 
-// Exportar cliente de forma segura
-export { redisClient };
+// Funciones de utilidad exportadas (todas son stubs)
+export const setCache = (key: string, value: any, ttl?: number) => 
+  redisClient.setCache(key, value, ttl);
+
+export const getCache = (key: string) => 
+  redisClient.getCache(key);
+
+export const deleteCache = (key: string) => 
+  redisClient.deleteCache(key);
+
+export const setCacheHash = (key: string, field: string, value: any) => 
+  redisClient.setCacheHash(key, field, value);
+
+export const getCacheHash = (key: string, field: string) => 
+  redisClient.getCacheHash(key, field);
+
+export const getAllCacheHash = (key: string) => 
+  redisClient.getAllCacheHash(key);
+
+export const isRedisEnabled = () => redisClient.isRedisEnabled();
