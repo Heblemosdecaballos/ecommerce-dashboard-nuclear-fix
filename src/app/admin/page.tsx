@@ -4,7 +4,9 @@ import { redirect } from 'next/navigation'
 
 export default async function AdminHome() {
   const supabase = createSupabaseServerClient()
-  const { data: { user } } = supabase ? await supabase.auth.getUser() : { data: { user: null } }
+  if (!supabase) redirect('/auth')
+  
+  const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/auth')
 
   const { data: me } = await supabase
@@ -24,7 +26,7 @@ export default async function AdminHome() {
     <div className="space-y-4">
       <h2 className="text-xl font-semibold">Hall de la Fama</h2>
       <ul className="divide-y rounded-md border bg-white/60">
-        {(profiles ?? []).map((p) => (
+        {(profiles ?? []).map((p: any) => (
           <li key={p.id} className="flex items-center justify-between px-4 py-3">
             <div className="text-sm">
               <div className="font-medium">{p.title}</div>

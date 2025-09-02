@@ -3,6 +3,7 @@ import { createSupabaseServerClient } from '@/utils/supabase/server';
 
 export async function getProfileBySlug(slug: string) {
   const supabase = createSupabaseServerClient();
+  if (!supabase) return null;
 
   const { data, error } = await supabase
     .from('hall_profiles')
@@ -17,6 +18,7 @@ export async function getProfileBySlug(slug: string) {
 
 export async function getViewerProfile() {
   const supabase = createSupabaseServerClient();
+  if (!supabase) return null;
 
   const {
     data: { user },
