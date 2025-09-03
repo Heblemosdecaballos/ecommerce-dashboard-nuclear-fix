@@ -1,6 +1,5 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { updateSession } from "@/utils/supabase/middleware";
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
@@ -18,13 +17,8 @@ export async function middleware(req: NextRequest) {
     }
   }
   
-  // Handle Supabase auth session
-  try {
-    await updateSession(req, res);
-  } catch (error) {
-    console.error('Supabase session update error:', error);
-    // Continue without failing if auth update fails
-  }
+  // Skip Supabase auth for now to avoid deployment issues
+  // TODO: Re-enable when Supabase is properly configured
   
   // Add security headers for all routes
   res.headers.set('X-Frame-Options', 'DENY');
